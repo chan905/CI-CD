@@ -1,0 +1,23 @@
+CI::::::::::::
+We have  a Git reporisity, where we have our application source code. lets say a java application. Now as soon as a developer raises a PR 
+we have configured webhooks using the webhooks we configured a jenkins pipelines. so what we done is we have used declerative piples beacuse they are easy to collerabte
+we run multiple stages some of these stages are Build stage ---using maven as a build language we build the appliacation, where we also do some unit test.  if the app is bulid successfully 
+next stage is static code analysis, we will verify  that the appl is not exposed to any static code. after that we also have some sast and dast tool
+(Static Application Security Testing (SAST) and Dynamic Application Security Testing (DAST) tools) 
+where we verify the appl security whether this new chnage were introduces any sec vul. if any of these things failes then we would send email notify or slack that we have configured 
+If all these atages are done successfully then we run a docker image we are running simple shell taregts to create the docker image out of the docker files which we have stored in the git repo itself
+and as soon as docker image is creteed. again using shell commands we push the docker image to the container registry Docker HUB.
+
+CD ::::
+Once docker image is pushed to Docker hub we have a k8s cluster. inside k8s cluster we have deployed 2 CD tools 
+1. Argo Image updater
+2. Argo CD
+so both of these are a k8s controller that we have deployed on k8s cluster
+
+1. AIU:::: it will watch continuosly the image registry. as soon as the new image was created it will pick the new image and update the new image in another git repo.
+this git repo is for purly image manifest....that is our helmchats or our customised pod.yml deploy.yml
+
+2. Argo will takes the new image and deploys in k8s cluster
+
+
+this is how we setup CI-CD
